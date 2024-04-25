@@ -1,4 +1,7 @@
-
 main{
     min-height: 85vh;
+}
+.card-img-top{
+    height: 30vh;
+    object-fit: contain;
 }

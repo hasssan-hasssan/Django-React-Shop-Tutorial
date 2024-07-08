@@ -22,3 +22,11 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+
+# Backend gitignore
+.env
+db.sqlite3-journal
+venv/
+__pycache__/

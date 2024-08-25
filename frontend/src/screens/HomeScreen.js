@@ -4,6 +4,7 @@ import Product from '../components/Product'
 import { fetchProducts } from '../redux/features/Product/productThunk'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
+import Message from '../components/Message'
 
 function HomeScreen() {
     const dispatch = useDispatch()
@@ -18,7 +19,7 @@ function HomeScreen() {
         <div>
             <h1 className='py-4'>Latest Products</h1>
             {loading ? <Loader />
-                : error ? <h3>{error}</h3>
+                : error ? <Message variant='danger' text={error} />
                     : (
                         <Row>
                             {products.map(product => (

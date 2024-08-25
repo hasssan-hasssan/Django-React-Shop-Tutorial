@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Product from '../components/Product'
-import axios from 'axios'
 import { fetchProducts } from '../redux/features/Product/productThunk'
 import { useDispatch, useSelector } from 'react-redux'
+import Loader from '../components/Loader'
 
 function HomeScreen() {
     const dispatch = useDispatch()
@@ -17,7 +17,7 @@ function HomeScreen() {
     return (
         <div>
             <h1 className='py-4'>Latest Products</h1>
-            {loading ? <h3>Loading ...</h3>
+            {loading ? <Loader />
                 : error ? <h3>{error}</h3>
                     : (
                         <Row>

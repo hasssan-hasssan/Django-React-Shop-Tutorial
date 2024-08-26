@@ -8,4 +8,10 @@ export const fetchProducts = createAsyncThunk(
     }
 )
 
-// pending , fulfilled , rejected
+
+export const fetchProductDetails = createAsyncThunk(
+    'fetchProductDetails',
+    async (id) => {
+        return await axios.get(`/api/v1/products/${id}/`)
+    }
+)

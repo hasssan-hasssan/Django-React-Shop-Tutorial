@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { listProduct } from './features/Product/productSlice'
+import { listProduct, productDetails } from './features/Product/productSlice'
 
 const rootReducer = {
-    listProduct: listProduct.reducer
+    listProduct: listProduct.reducer,
+    productDetails: productDetails.reducer
 }
 const initialState = {}
 

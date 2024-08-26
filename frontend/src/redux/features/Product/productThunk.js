@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import ProductService from '../../../services/productServices'
 
 export const fetchProducts = createAsyncThunk(
     'fetchProducts',
     async () => {
-        return await axios.get('/api/v1/products/')
+        return await ProductService.getProducts()
     }
 )
 
@@ -12,6 +12,6 @@ export const fetchProducts = createAsyncThunk(
 export const fetchProductDetails = createAsyncThunk(
     'fetchProductDetails',
     async (id) => {
-        return await axios.get(`/api/v1/products/${id}/`)
+        return await ProductService.getProduct(id)
     }
 )

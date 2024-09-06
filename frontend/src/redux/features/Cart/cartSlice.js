@@ -17,6 +17,10 @@ export const cartSlice = createSlice({
                 // Insert
                 state.cartItems = [...state.cartItems, item]
             }
+            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
         }
     }
 })
+
+
+export const { addItem } = cartSlice.actions

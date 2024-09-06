@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchProductDetails } from '../redux/features/Product/productThunk'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import { addItem } from '../redux/features/Cart/cartSlice'
 
 
 function ProductScreen() {
@@ -20,6 +21,14 @@ function ProductScreen() {
     }
 
     const addToCartHandler = () => {
+        dispatch(addItem({
+            product: id,
+            name: product.name,
+            image: product.image,
+            price: product.price,
+            countInStock: product.countInStock,
+            qty,
+        }))
         navigate('/cart')
     }
 

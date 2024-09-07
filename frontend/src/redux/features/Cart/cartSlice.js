@@ -18,9 +18,19 @@ export const cartSlice = createSlice({
                 state.cartItems = [...state.cartItems, item]
             }
             localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+        },
+        increaseQty: (state, action) => {
+            const item = state.cartItems.find(x => x.product === action.payload)
+            item.qty++
+            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+        },
+        decreaseQty: (state, action) => {
+            const item = state.cartItems.find(x => x.product === action.payload)
+            item.qty--
+            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
         }
     }
 })
 
 
-export const { addItem } = cartSlice.actions
+export const { addItem, increaseQty, decreaseQty } = cartSlice.actions

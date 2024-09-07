@@ -1,12 +1,13 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { decreaseQty, increaseQty } from '../redux/features/Cart/cartSlice'
 import { Row, Col, ListGroup, Image, ButtonGroup, Button, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Message from '../components/Message'
 
 function CartScreen() {
+    const dispatch = useDispatch()
     const { cartItems } = useSelector(state => state.cart)
-    cartItems.forEach(item => console.log(item))
     return (
         <Row>
             <Col md={9}>
@@ -28,7 +29,10 @@ function CartScreen() {
                                     <Col md={3} className='my-auto'>
                                         <ButtonGroup size='sm'>
                                             <Button
-                                                size='sm'>
+                                                onClick={() => dispatch(decreaseQty(item.product))}
+                                                disabled={item.qty === 1}
+                                                size='sm'
+                                            >
                                                 <i class="fa-solid fa-minus"></i>
                                             </Button>
                                             <Form.Control
@@ -38,7 +42,10 @@ function CartScreen() {
                                                 readOnly
                                             />
                                             <Button
-                                                size='sm'>
+                                                onClick={() => dispatch(increaseQty(item.product))}
+                                                disabled={item.qty === item.countInStock}
+                                                size='sm'
+                                            >
                                                 <i class="fa-solid fa-plus"></i>
                                             </Button>
                                         </ButtonGroup>

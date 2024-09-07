@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { decreaseQty, increaseQty } from '../redux/features/Cart/cartSlice'
+import { decreaseQty, increaseQty, removeItem } from '../redux/features/Cart/cartSlice'
 import { Row, Col, ListGroup, Image, ButtonGroup, Button, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Message from '../components/Message'
@@ -52,6 +52,7 @@ function CartScreen() {
                                     </Col>
                                     <Col md={1} className='my-auto'>
                                         <Button
+                                            onClick={() => dispatch(removeItem(item.product))}
                                             type='button'
                                             variant='light'
                                         >

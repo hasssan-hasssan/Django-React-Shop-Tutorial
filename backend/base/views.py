@@ -6,7 +6,9 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Product
-from .serializers import ProductSerializer, UserSerializer
+from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken
+from django.contrib.auth.hashers import make_password
+from base.strConst import *
 
 
 routes = [
@@ -60,3 +62,20 @@ def getUsers(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def registerUser(request):
+    data = request.data
+    try:
+        user = User.objects.create(
+            first_name=data['name'],
+            username=data['email'],
+            email=data['email'],
+            password=make_password(data['password']),
+        )
+        serializer = UserSerializerWithToken(user, many=False)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except:
+        message = {DETAILS: ERROR_USER_ALREADY_EXISTS}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)

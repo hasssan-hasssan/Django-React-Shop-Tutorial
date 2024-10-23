@@ -3,14 +3,18 @@ import { listProduct, productDetails } from './features/Product/productSlice'
 import { cartSlice } from './features/Cart/cartSlice'
 import { userLoginSlice } from './features/User/userSlice'
 
-
+// fetch user cart 
 const cartItemsFromLocalStorage = localStorage.getItem('cartItems') ?
     JSON.parse(localStorage.getItem('cartItems')) : []
 
+// fetch user information
+const userInfoFromLocalStorage = localStorage.getItem('userInfo') ?
+    JSON.parse(localStorage.getItem('userInfo')) : {}
+
 const initialState = {
-    cart: {
-        cartItems: cartItemsFromLocalStorage
-    }
+    // Initializaion the redux store
+    cart: { cartItems: cartItemsFromLocalStorage },
+    userLogin: { userInfo: userInfoFromLocalStorage }
 }
 
 const rootReducer = {

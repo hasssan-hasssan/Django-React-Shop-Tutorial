@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login } from "./userThunk";
+import { login, logout } from "./userThunk";
 
 
 export const userLoginSlice = createSlice({
@@ -24,6 +24,12 @@ export const userLoginSlice = createSlice({
             state.userInfo = {}
             state.loading = false
             state.error = action.error.message
+        })
+
+        builder.addCase(logout.fulfilled, (state, action) => {
+            state.userInfo = {}
+            state.loading = false
+            state.error = ''
         })
     }
 })

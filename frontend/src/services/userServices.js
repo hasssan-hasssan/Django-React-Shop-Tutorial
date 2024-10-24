@@ -12,5 +12,10 @@ const signInUser = (email, password) => {
     })
 }
 
-const UserServices = { signInUser }
+
+const signOutUser = () => {
+    localStorage.removeItem('userInfo')
+}
+
+const UserServices = { signInUser, signOutUser }
 export default UserServices;

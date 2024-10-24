@@ -7,3 +7,11 @@ export const login = createAsyncThunk(
         return await UserServices.signInUser(obj.email, obj.password)
     }
 )
+
+
+export const logout = createAsyncThunk(
+    'logout',
+    () => {
+        UserServices.signOutUser()
+    }
+)

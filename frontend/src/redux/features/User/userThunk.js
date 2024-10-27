@@ -15,3 +15,17 @@ export const logout = createAsyncThunk(
         UserServices.signOutUser()
     }
 )
+
+
+export const register = createAsyncThunk(
+    'register',
+    async (obj, thunkAPI) => {
+        try {
+            const response = await UserServices.signUpUser(obj.name, obj.email, obj.password)
+            thunkAPI.dispatch({ type: 'login/fulfilled', payload: response })
+            return response
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)

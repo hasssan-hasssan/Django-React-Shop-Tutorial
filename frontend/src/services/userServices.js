@@ -17,5 +17,10 @@ const signOutUser = () => {
     localStorage.removeItem('userInfo')
 }
 
-const UserServices = { signInUser, signOutUser }
+
+const signUpUser = (name, email, password) => {
+    return backend.post('/api/v1/users/register/', { 'name': name, 'email': email, 'password': password })
+}
+
+const UserServices = { signInUser, signOutUser, signUpUser }
 export default UserServices;

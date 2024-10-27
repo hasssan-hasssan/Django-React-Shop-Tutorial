@@ -19,7 +19,12 @@ const signOutUser = () => {
 
 
 const signUpUser = (name, email, password) => {
-    return backend.post('/api/v1/users/register/', { 'name': name, 'email': email, 'password': password })
+    return backend.post('/api/v1/users/register/', { 'name': name, 'email': email, 'password': password }).then((response) => {
+        if (String(response.status).startsWith('2')) {
+            localStorage.setItem('userInfo', JSON.stringify(response.data))
+        }
+        return response
+    })
 }
 
 const UserServices = { signInUser, signOutUser, signUpUser }

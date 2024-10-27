@@ -60,8 +60,9 @@ export const userRegisterSlice = createSlice({
             state.userInfo = {}
             state.loading = false
             state.success = false
-            // state.error
-            console.log('Register rejected: ', action)
+            state.error = action.payload.response && action.payload.response.data.details
+                ? action.payload.response.data.details : action.payload.message
+            // console.log('Register rejected: ', action)
         })
     }
 

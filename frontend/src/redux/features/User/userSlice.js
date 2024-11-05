@@ -64,6 +64,12 @@ export const userRegisterSlice = createSlice({
                 ? action.payload.response.data.details : action.payload.message
             // console.log('Register rejected: ', action)
         })
+        builder.addCase(logout.fulfilled, (state) => {
+            state.userInfo = {}
+            state.loading = false
+            state.success = false
+            state.error = ''
+        })
     }
 
 })
@@ -95,6 +101,12 @@ export const userDetailsSlice = createSlice({
             state.loading = false
             state.success = false
             state.error = action.error.message
+        })
+        builder.addCase(logout.fulfilled, (state) => {
+            state.user = {}
+            state.loading = false
+            state.success = false
+            state.error = ''
         })
     }
 })

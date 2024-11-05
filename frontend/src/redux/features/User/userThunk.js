@@ -29,3 +29,14 @@ export const register = createAsyncThunk(
         }
     }
 )
+
+
+export const getUserDetails = createAsyncThunk(
+    'getUserDetails',
+    async (id, thunkAPI) => {
+        const { userLogin: { userInfo } } = thunkAPI.getState()
+        const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
+        const response = await UserServices.getUserProfile(id, config)
+        return response
+    }
+)

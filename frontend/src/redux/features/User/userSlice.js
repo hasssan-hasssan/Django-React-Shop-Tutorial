@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, logout, register } from "./userThunk";
+import { login, logout, register, getUserDetails } from "./userThunk";
 
 
 export const userLoginSlice = createSlice({
@@ -66,4 +66,35 @@ export const userRegisterSlice = createSlice({
         })
     }
 
+})
+
+
+export const userDetailsSlice = createSlice({
+    name: 'userDetails',
+    initialState: {
+        user: {},
+        loading: false,
+        success: false,
+        error: ''
+    },
+    extraReducers: (builder) => {
+        builder.addCase(getUserDetails.pending, (state) => {
+            state.user = {}
+            state.loading = true
+            state.success = false
+            state.error = ''
+        })
+        builder.addCase(getUserDetails.fulfilled, (state, action) => {
+            state.user = action.payload.data
+            state.loading = false
+            state.success = true
+            state.error = ''
+        })
+        builder.addCase(getUserDetails.rejected, (state, action) => {
+            state.user = {}
+            state.loading = false
+            state.success = false
+            state.error = action.error.message
+        })
+    }
 })

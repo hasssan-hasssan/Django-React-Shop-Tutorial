@@ -27,5 +27,10 @@ const signUpUser = (name, email, password) => {
     })
 }
 
-const UserServices = { signInUser, signOutUser, signUpUser }
+
+const getUserProfile = (id, config) => {
+    return backend.get(`/api/v1/users/${id}/`, config)
+}
+
+const UserServices = { signInUser, signOutUser, signUpUser, getUserProfile }
 export default UserServices;

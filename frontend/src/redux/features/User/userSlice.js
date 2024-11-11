@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, logout, register, getUserDetails } from "./userThunk";
+import { login, logout, register, getUserDetails, updateUserProfile } from "./userThunk";
 
 
 export const userLoginSlice = createSlice({
@@ -8,6 +8,13 @@ export const userLoginSlice = createSlice({
         userInfo: {},
         loading: false,
         error: ''
+    },
+    reducers: {
+        updateNameAndEmail: (state, action) => {
+            state.userInfo.name = action.payload.name
+            state.userInfo.email = action.payload.email
+            localStorage.setItem('userInfo', JSON.stringify(state.userInfo))
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(login.pending, (state, action) => {
@@ -33,6 +40,7 @@ export const userLoginSlice = createSlice({
         })
     }
 })
+export const { updateNameAndEmail } = userLoginSlice.actions;
 
 
 export const userRegisterSlice = createSlice({
@@ -110,3 +118,43 @@ export const userDetailsSlice = createSlice({
         })
     }
 })
+
+
+export const userUpdateProfileSlice = createSlice({
+    name: 'userUpdateProfile',
+    initialState: {
+        userInfo: {},
+        loading: false,
+        success: false,
+        error: ''
+    },
+    reducers: {
+        reset: (state) => {
+            state.userInfo = {}
+            state.loading = false
+            state.success = false
+            state.error = ''
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(updateUserProfile.pending, (state) => {
+            state.userInfo = {}
+            state.loading = true
+            state.success = false
+            state.error = ''
+        })
+        builder.addCase(updateUserProfile.fulfilled, (state, action) => {
+            state.userInfo = action.payload.data
+            state.loading = false
+            state.success = true
+            state.error = ''
+        })
+        builder.addCase(updateUserProfile.rejected, (state, action) => {
+            state.userInfo = {}
+            state.loading = false
+            state.success = false
+            state.error = action.error.message
+        })
+    }
+})
+export const { reset } = userUpdateProfileSlice.actions;

@@ -32,5 +32,9 @@ const getUserProfile = (id, config) => {
     return backend.get(`/api/v1/users/${id}/`, config)
 }
 
-const UserServices = { signInUser, signOutUser, signUpUser, getUserProfile }
+
+const updateUserProfile = (data, config) => {
+    return backend.put('/api/v1/users/profile/update/', data, config)
+}
+const UserServices = { signInUser, signOutUser, signUpUser, getUserProfile, updateUserProfile }
 export default UserServices;

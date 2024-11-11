@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import UserServices from "../../../services/userServices";
+import { updateNameAndEmail } from "./userSlice";
 
 export const login = createAsyncThunk(
     'login',
@@ -37,6 +38,18 @@ export const getUserDetails = createAsyncThunk(
         const { userLogin: { userInfo } } = thunkAPI.getState()
         const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
         const response = await UserServices.getUserProfile(id, config)
+        return response
+    }
+)
+
+
+export const updateUserProfile = createAsyncThunk(
+    'updateUserProfile',
+    async (user, thunkAPI) => {
+        const { userLogin: { userInfo } } = thunkAPI.getState()
+        const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
+        const response = await UserServices.updateUserProfile(user, config)
+        thunkAPI.dispatch(updateNameAndEmail({ 'name': response.data.name, 'email': response.data.email }))
         return response
     }
 )

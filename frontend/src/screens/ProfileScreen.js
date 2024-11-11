@@ -1,8 +1,11 @@
 import React from 'react'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getUserDetails } from '../redux/features/User/userThunk'
+import { getUserDetails, updateUserProfile } from '../redux/features/User/userThunk'
+import { reset } from '../redux/features/User/userSlice'
 
 function ProfileScreen() {
     const dispatch = useDispatch()
@@ -13,6 +16,7 @@ function ProfileScreen() {
     const [password, setPassword] = React.useState('')
     const [confirmPassword, setConfirmPassword] = React.useState('')
     const [message, setMessage] = React.useState('')
+    const [successUpdate, setSuccessUpdate] = React.useState('')
 
 
     const { userInfo } = useSelector(state => state.userLogin)
@@ -22,29 +26,61 @@ function ProfileScreen() {
         loading: loadingUserDetails,
         error: errorUserDetails,
     } = useSelector(state => state.userDetails)
-
+    const {
+        loading: loadingUserUpdateProfile,
+        success: successUserUpdateProfile,
+        error: errorUserUpdateProfile,
+    } = useSelector(state => state.userUpdateProfile)
 
     React.useEffect(() => {
         if (!userInfo.email) {
             navigate('/login?redirect=/profile')
         } else {
-            if (!successUserDetails && !user.email) {
+            if ((!successUserDetails && !user.email) || successUserUpdateProfile) {
+                dispatch(reset()) // reset userUpdateProfileSlice
                 dispatch(getUserDetails('profile'))
             } else {
                 setEmail(user.email)
                 setName(user.name)
             }
         }
-    }, [userInfo, navigate, dispatch, successUserDetails])
+    }, [userInfo, navigate, dispatch, successUserDetails, successUserUpdateProfile])
+
+    const resetStates = () => {
+        setPassword('')
+        setConfirmPassword('')
+        setMessage('')
+    }
+
+
+    const submitHandler = (e) => {
+        e.preventDefault()
+        if (password !== confirmPassword) {
+            setMessage('Passwords do not match !')
+        } else {
+            dispatch(updateUserProfile({
+                'id': user._id,
+                'name': name,
+                'email': email,
+                'password': password
+            }))
+            resetStates()
+            setSuccessUpdate('Profile successfully updated !')
+        }
+    }
+
+
     return (
         <Row>
             <Col md={3}>
                 <h2 className='mt-4'>my profile</h2>
-                {/* {loading ? <Loader />
-                : error ? <Message variant='danger' text={error} />
-                    : message ? <Message variant='warning' text={message} />
-                        : <></>} */}
-                <Form>
+                {loadingUserDetails || loadingUserUpdateProfile ? <Loader />
+                    : errorUserDetails ? <Message variant='danger' text={errorUserDetails} />
+                        : errorUserUpdateProfile ? <Message variant='danger' text={errorUserUpdateProfile} />
+                            : message ? <Message variant='warning' text={message} />
+                                : successUpdate ? <Message variant='success' text={successUpdate} />
+                                    : <></>}
+                <Form onSubmit={submitHandler}>
                     <Form.Group className="mt-4">
                         <Form.Label>Full Name</Form.Label>
                         <Form.Control
@@ -82,7 +118,7 @@ function ProfileScreen() {
                         ></Form.Control>
                     </Form.Group>
                     <Button
-                        // disabled={loading === true}
+                        disabled={loadingUserDetails || loadingUserUpdateProfile === true}
                         type='submit'
                         className='mt-4 col-6'>update</Button>
                 </Form>

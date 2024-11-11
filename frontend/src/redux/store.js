@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { listProduct, productDetails } from './features/Product/productSlice'
 import { cartSlice } from './features/Cart/cartSlice'
-import { userLoginSlice, userRegisterSlice, userDetailsSlice } from './features/User/userSlice'
+import { userLoginSlice, userRegisterSlice, userDetailsSlice, userUpdateProfileSlice } from './features/User/userSlice'
 
 // fetch user cart 
 const cartItemsFromLocalStorage = localStorage.getItem('cartItems') ?
@@ -24,6 +24,7 @@ const rootReducer = {
     userLogin: userLoginSlice.reducer,
     userRegister: userRegisterSlice.reducer,
     userDetails: userDetailsSlice.reducer,
+    userUpdateProfile: userUpdateProfileSlice.reducer,
 }
 
 const store = configureStore({

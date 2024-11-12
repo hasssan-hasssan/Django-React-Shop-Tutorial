@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { listProduct, productDetails } from './features/Product/productSlice'
+import { listProductSlice, productDetailsSlice } from './features/Product/productSlice'
 import { cartSlice } from './features/Cart/cartSlice'
 import { userLoginSlice, userRegisterSlice, userDetailsSlice, userUpdateProfileSlice } from './features/User/userSlice'
 
@@ -18,8 +18,8 @@ const initialState = {
 }
 
 const rootReducer = {
-    listProduct: listProduct.reducer,
-    productDetails: productDetails.reducer,
+    listProduct: listProductSlice.reducer,
+    productDetails: productDetailsSlice.reducer,
     cart: cartSlice.reducer,
     userLogin: userLoginSlice.reducer,
     userRegister: userRegisterSlice.reducer,

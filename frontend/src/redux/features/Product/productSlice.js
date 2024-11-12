@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { fetchProducts, fetchProductDetails } from './productThunk'
 
 
-export const listProduct = createSlice({
+export const listProductSlice = createSlice({
     name: 'listProduct',
     initialState: {
         loading: false,
@@ -21,13 +21,14 @@ export const listProduct = createSlice({
         builder.addCase(fetchProducts.rejected, (state, action) => {
             state.loading = false
             state.products = []
-            state.error = action.error.message
+            state.error = action.payload.response && action.payload.response.data.detail
+                ? action.payload.response.data.detail : action.payload.message
         })
     }
 })
 
 
-export const productDetails = createSlice({
+export const productDetailsSlice = createSlice({
     name: 'productDetails',
     initialState: {
         loading: false,
@@ -46,7 +47,8 @@ export const productDetails = createSlice({
         builder.addCase(fetchProductDetails.rejected, (state, action) => {
             state.loading = false
             state.product = {}
-            state.error = action.error.message
+            state.error = action.payload.response && action.payload.response.data.detail
+                ? action.payload.response.data.detail : action.payload.message
         })
     }
 })

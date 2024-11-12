@@ -69,6 +69,7 @@ function RegisterScreen() {
                         placeholder='Enter your email'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     ></Form.Control>
                 </Form.Group>
                 <Form.Group className="mt-4">
@@ -78,6 +79,7 @@ function RegisterScreen() {
                         placeholder='Enter your password'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     ></Form.Control>
                 </Form.Group>
                 <Form.Group className="mt-4">
@@ -87,6 +89,7 @@ function RegisterScreen() {
                         placeholder='Confirm your password'
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
                     ></Form.Control>
                 </Form.Group>
                 <Button

@@ -56,6 +56,7 @@ function LoginScreen() {
                         placeholder='Enter your email address'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     ></Form.Control>
                 </Form.Group>
                 <Form.Group className='mt-4'>
@@ -65,6 +66,7 @@ function LoginScreen() {
                         placeholder='Enter your password'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     ></Form.Control>
                 </Form.Group>
                 <Button

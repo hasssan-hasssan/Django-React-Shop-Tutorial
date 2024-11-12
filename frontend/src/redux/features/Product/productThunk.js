@@ -3,15 +3,23 @@ import ProductService from '../../../services/productServices'
 
 export const fetchProducts = createAsyncThunk(
     'fetchProducts',
-    async () => {
-        return await ProductService.getProducts()
+    async (arg, thunkAPI) => {
+        try {
+            return await ProductService.getProducts()
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
     }
 )
 
 
 export const fetchProductDetails = createAsyncThunk(
     'fetchProductDetails',
-    async (id) => {
-        return await ProductService.getProduct(id)
+    async (id, thunkAPI) => {
+        try {
+            return await ProductService.getProduct(id)
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
     }
 )

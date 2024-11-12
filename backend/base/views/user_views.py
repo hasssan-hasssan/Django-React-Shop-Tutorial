@@ -37,7 +37,7 @@ def registerUser(request):
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     except:
-        message = {DETAILS: ERROR_USER_ALREADY_EXISTS}
+        message = {DETAIL: ERROR_USER_ALREADY_EXISTS}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 

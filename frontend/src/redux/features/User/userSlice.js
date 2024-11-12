@@ -30,7 +30,8 @@ export const userLoginSlice = createSlice({
         builder.addCase(login.rejected, (state, action) => {
             state.userInfo = {}
             state.loading = false
-            state.error = action.error.message
+            state.error = action.payload.response && action.payload.response.data.detail
+                ? action.payload.response.data.detail : action.payload.message
         })
 
         builder.addCase(logout.fulfilled, (state, action) => {
@@ -108,7 +109,8 @@ export const userDetailsSlice = createSlice({
             state.user = {}
             state.loading = false
             state.success = false
-            state.error = action.error.message
+            state.error = action.payload.response && action.payload.response.data.detail
+                ? action.payload.response.data.detail : action.payload.message
         })
         builder.addCase(logout.fulfilled, (state) => {
             state.user = {}
@@ -153,7 +155,8 @@ export const userUpdateProfileSlice = createSlice({
             state.userInfo = {}
             state.loading = false
             state.success = false
-            state.error = action.error.message
+            state.error = action.payload.response && action.payload.response.data.detail
+                ? action.payload.response.data.detail : action.payload.message
         })
     }
 })

@@ -80,3 +80,8 @@ def updateUserProfile(request):
     user.save()
     serializer = UserSerializerWithToken(user, many=False)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def verifyEmail(request, token):
+    pass

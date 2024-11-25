@@ -14,3 +14,8 @@ ERROR_PRODUCTS_NOT_REGISTERED = 'Oops, No product registered yet!'
 NEW_REGISTER = 'new_register'
 IS_NOT_ACTIVE = 'is_not_active'
 ERROR_ON_SENDING_EMAIL = 'Oops, there is a problem on sending email!'
+EMAIL_SUBJECT = '[ E-Shop Activation Email ]'
+
+
+def EMAIL_BODY(status: str, link: str, name: str) -> str:
+    return f'Hi {name}, Welcome {"" if status is NEW_REGISTER else "back"} to E-Shop. Please click on below link to active your account in E-Shop.\n\n{link}'

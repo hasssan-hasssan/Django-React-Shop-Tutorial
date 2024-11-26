@@ -166,6 +166,7 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
 
+    "ALGORITHM": "HS256",
     # It will work instead of the default serializer(TokenObtainPairSerializer).
     "TOKEN_OBTAIN_SERIALIZER": "base.serializers.MyTokenObtainPairSerializer",
 }

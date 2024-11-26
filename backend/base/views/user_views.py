@@ -4,9 +4,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from django.conf import settings
+from django.http import HttpResponseRedirect
 from base.serializers import UserSerializer, UserSerializerWithToken
 from base.strConst import *
 from base import utils
+import jwt
 
 
 @api_view(['GET'])
@@ -84,4 +87,16 @@ def updateUserProfile(request):
 
 @api_view(['GET'])
 def verifyEmail(request, token):
-    pass
+    try:
+        payload = jwt.decode(
+            jwt=token,
+            key=settings.SECRET_KEY,
+            algorithms=[settings.SIMPLE_JWT['ALGORITHM']]
+        )
+    except:
+        return HttpResponseRedirect(f'{settings.FRONTEND_DOMAIN}/login?token=invalid')
+    else:
+        user = User.objects.get(id=payload['user_id'])
+        user.is_active = True
+        user.save()
+        return HttpResponseRedirect(f'{settings.FRONTEND_DOMAIN}/login?token=valid')

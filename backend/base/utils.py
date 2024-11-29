@@ -3,14 +3,13 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.conf import settings
 from django.core.mail import EmailMessage
-from base.views.user_views import verifyEmail
 from base.strConst import *
 
 
 def createActivationLink(user: User) -> str:
     token: str = str(RefreshToken.for_user(user).access_token)
     link: str = f'{settings.BACKEND_DOMAIN}{
-        reverse(verifyEmail, kwargs={'token': token})}'
+        reverse('verifyEmail', kwargs={'token': token})}'
     return link
 
 

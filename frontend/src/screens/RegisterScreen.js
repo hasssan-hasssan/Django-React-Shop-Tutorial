@@ -23,9 +23,10 @@ function RegisterScreen() {
     const [password, setPassword] = React.useState('')
     const [confirmPassword, setConfirmPassword] = React.useState('')
     const [message, setMessage] = React.useState('')
+    const [emailMsg, setEmailMsg] = React.useState('')
 
-    const { success, loading, error } = useSelector(state => state.userRegister)
-    const { userInfo } = useSelector(state => state.userLogin)
+    const { success, loading, error, userInfo } = useSelector(state => state.userRegister)
+    const { userInfo: user } = useSelector(state => state.userLogin)
 
     const submitHandler = (e) => {
         e.preventDefault()
@@ -37,11 +38,23 @@ function RegisterScreen() {
         }
     }
 
+    const resetStates = () => {
+        setName('')
+        setEmail('')
+        setPassword('')
+        setConfirmPassword('')
+        setMessage('')
+    }
+
     React.useEffect(() => {
-        if (success || (userInfo && userInfo.email)) {
+        if (user && user.email) {
             navigate(redirect)
         }
-    }, [success, userInfo, redirect, navigate])
+        if (userInfo && userInfo.detail) {
+            setEmailMsg(userInfo.detail)
+            resetStates()
+        }
+    }, [success, userInfo, redirect, navigate, user])
 
 
 
@@ -51,7 +64,8 @@ function RegisterScreen() {
             {loading ? <Loader />
                 : error ? <Message variant='danger' text={error} />
                     : message ? <Message variant='warning' text={message} />
-                        : <></>}
+                        : emailMsg ? <Message variant='success' text={emailMsg} />
+                            : <></>}
             <Form onSubmit={submitHandler}>
                 <Form.Group className="mt-4">
                     <Form.Label>Full Name</Form.Label>

@@ -26,9 +26,7 @@ export const register = createAsyncThunk(
     'register',
     async (user, thunkAPI) => {
         try {
-            const response = await UserServices.signUpUser(user.name, user.email, user.password)
-            thunkAPI.dispatch({ type: 'login/fulfilled', payload: response })
-            return response
+            return await UserServices.signUpUser(user.name, user.email, user.password)
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }

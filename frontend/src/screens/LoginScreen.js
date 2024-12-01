@@ -15,10 +15,12 @@ function LoginScreen() {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
     const redirect = urlParams.get('redirect') ? urlParams.get('redirect') : '/'
+    const token = urlParams.get('token') ? urlParams.get('token') : ''
 
     // defind local state to get user inputs
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
+    const [activationMsg, setActivationMsg] = React.useState('')
 
     // fetch user information from redux store
     const { userInfo, loading, error } = useSelector(state => state.userLogin)
@@ -38,7 +40,19 @@ function LoginScreen() {
             // it means user is authenticated we should redirect the user
             navigate(redirect)
         }
-    }, [userInfo, navigate, redirect])
+        if (token !== '') {
+            switch (token) {
+                case 'valid':
+                    setActivationMsg('Your account activated. Now you can login.')
+                    break;
+                case 'invalid':
+                    setActivationMsg('Your activation link is invalid. Please goto register page and try again.')
+                    break;
+                default:
+                    break;
+            }
+        }
+    }, [userInfo, navigate, redirect, token])
 
     return (
         <FormContainer>
@@ -46,7 +60,9 @@ function LoginScreen() {
             {
                 loading ? <Loader />
                     : error ? <Message variant='danger' text={error} />
-                        : <></>
+                        : token === 'valid' ? <Message variant='success' text={activationMsg} />
+                            : token === 'invalid' ? <Message variant='danger' text={activationMsg} />
+                                : <></>
             }
             <Form onSubmit={submitHandler}>
                 <Form.Group className='mt-4'>

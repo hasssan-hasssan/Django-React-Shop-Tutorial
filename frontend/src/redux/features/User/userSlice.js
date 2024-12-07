@@ -14,6 +14,11 @@ export const userLoginSlice = createSlice({
             state.userInfo.name = action.payload.name
             state.userInfo.email = action.payload.email
             localStorage.setItem('userInfo', JSON.stringify(state.userInfo))
+        },
+        updateTokens: (state, action) => {
+            state.userInfo.access = action.payload.access
+            state.userInfo.refresh = action.payload.refresh
+            localStorage.setItem('userInfo', JSON.stringify(state.userInfo))
         }
     },
     extraReducers: (builder) => {
@@ -41,7 +46,7 @@ export const userLoginSlice = createSlice({
         })
     }
 })
-export const { updateNameAndEmail } = userLoginSlice.actions;
+export const { updateNameAndEmail, updateTokens } = userLoginSlice.actions;
 
 
 export const userRegisterSlice = createSlice({

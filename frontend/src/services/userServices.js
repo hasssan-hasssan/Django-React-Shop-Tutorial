@@ -31,5 +31,10 @@ const getUserProfile = (id, config) => {
 const updateUserProfile = (data, config) => {
     return backend.put('/api/v1/users/profile/update/', data, config)
 }
-const UserServices = { signInUser, signOutUser, signUpUser, getUserProfile, updateUserProfile }
+
+
+const tokenRefresh = (data) => {
+    return backend.post('/api/v1/users/token/refresh/', data)
+}
+const UserServices = { signInUser, signOutUser, signUpUser, getUserProfile, updateUserProfile, tokenRefresh }
 export default UserServices;

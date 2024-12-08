@@ -9,3 +9,5 @@
 ### [Chapter 4: Manage cart page]()
 
 ### [Chapter 5: Authentication system => backend]()
+
+### [Chapter 6: Authentication system => frontend]()

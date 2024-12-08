@@ -36,14 +36,12 @@ export const register = createAsyncThunk(
 
 export const getUserDetails = createAsyncThunk(
     'getUserDetails',
-    async (id, thunkAPI) => {
+    async (id, { dispatch, getState, rejectWithValue }) => {
         try {
-            const { userLogin: { userInfo } } = thunkAPI.getState()
-            const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
-            const response = await UserServices.getUserProfile(id, config)
-            return response
+            const { userLogin: { userInfo } } = getState()
+            return await UserServices.getUserProfile(id, { userInfo, dispatch })
         } catch (error) {
-            return thunkAPI.rejectWithValue(error)
+            return rejectWithValue(error)
         }
     }
 )
@@ -51,15 +49,14 @@ export const getUserDetails = createAsyncThunk(
 
 export const updateUserProfile = createAsyncThunk(
     'updateUserProfile',
-    async (user, thunkAPI) => {
+    async (user, { dispatch, getState, rejectWithValue }) => {
         try {
-            const { userLogin: { userInfo } } = thunkAPI.getState()
-            const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
-            const response = await UserServices.updateUserProfile(user, config)
-            thunkAPI.dispatch(updateNameAndEmail({ 'name': response.data.name, 'email': response.data.email }))
+            const { userLogin: { userInfo } } = getState()
+            const response = await UserServices.updateUserProfile(user, { userInfo, dispatch })
+            dispatch(updateNameAndEmail({ 'name': response.data.name, 'email': response.data.email }))
             return response
         } catch (error) {
-            return thunkAPI.rejectWithValue(error)
+            return rejectWithValue(error)
         }
     }
 )

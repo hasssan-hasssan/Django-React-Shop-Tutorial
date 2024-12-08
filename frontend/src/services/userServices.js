@@ -1,4 +1,4 @@
-import { backend } from "../utils/axiosInstance";
+import { backend, authAxiosInstance } from "../utils/axiosInstance";
 
 
 const signInUser = (email, password) => {
@@ -23,13 +23,15 @@ const signUpUser = (name, email, password) => {
 }
 
 
-const getUserProfile = (id, config) => {
-    return backend.get(`/api/v1/users/${id}/`, config)
+const getUserProfile = (id, { userInfo, dispatch }) => {
+    const authBackend = authAxiosInstance(userInfo, dispatch)
+    return authBackend.get(`/api/v1/users/${id}/`)
 }
 
 
-const updateUserProfile = (data, config) => {
-    return backend.put('/api/v1/users/profile/update/', data, config)
+const updateUserProfile = (data, { userInfo, dispatch }) => {
+    const authBackend = authAxiosInstance(userInfo, dispatch)
+    return authBackend.put('/api/v1/users/profile/update/', data)
 }
 
 

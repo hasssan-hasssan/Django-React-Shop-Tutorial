@@ -4,7 +4,8 @@ import { createSlice } from '@reduxjs/toolkit'
 export const cartSlice = createSlice({
     name: 'cart',
     initialState: {
-        cartItems: []
+        cartItems: [],
+        shippingAddress: {}
     },
     reducers: {
         addItem: (state, action) => {
@@ -32,9 +33,13 @@ export const cartSlice = createSlice({
         removeItem: (state, action) => {
             state.cartItems = state.cartItems.filter(x => x.product !== action.payload)
             localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+        },
+        saveShippingAddress: (state, action) => {
+            state.shippingAddress = action.payload
+            localStorage.setItem('shippingAddress', JSON.stringify(state.shippingAddress))
         }
     }
 })
 
 
-export const { addItem, increaseQty, decreaseQty, removeItem } = cartSlice.actions
+export const { addItem, increaseQty, decreaseQty, removeItem, saveShippingAddress } = cartSlice.actions

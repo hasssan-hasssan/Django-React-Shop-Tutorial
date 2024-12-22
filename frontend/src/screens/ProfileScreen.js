@@ -97,6 +97,7 @@ function ProfileScreen() {
                             placeholder='Enter your email'
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            readOnly
                         ></Form.Control>
                     </Form.Group>
                     <Form.Group className="mt-4">

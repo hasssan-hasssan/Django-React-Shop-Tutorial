@@ -5,7 +5,8 @@ export const cartSlice = createSlice({
     name: 'cart',
     initialState: {
         cartItems: [],
-        shippingAddress: {}
+        shippingAddress: {},
+        paymentMethod: '',
     },
     reducers: {
         addItem: (state, action) => {
@@ -37,9 +38,13 @@ export const cartSlice = createSlice({
         saveShippingAddress: (state, action) => {
             state.shippingAddress = action.payload
             localStorage.setItem('shippingAddress', JSON.stringify(state.shippingAddress))
+        },
+        savePaymentMethod: (state, action) => {
+            state.paymentMethod = action.payload
+            localStorage.setItem('paymentMethod', JSON.stringify(state.paymentMethod))
         }
     }
 })
 
 
-export const { addItem, increaseQty, decreaseQty, removeItem, saveShippingAddress } = cartSlice.actions
+export const { addItem, increaseQty, decreaseQty, removeItem, saveShippingAddress, savePaymentMethod } = cartSlice.actions

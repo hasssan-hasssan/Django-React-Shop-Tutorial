@@ -15,11 +15,15 @@ const userInfoFromLocalStorage = localStorage.getItem('userInfo') ?
 const shippingAddressFromLocalStorage = localStorage.getItem('shippingAddress') ?
     JSON.parse(localStorage.getItem('shippingAddress')) : {}
 
+const paymentMethodFromLocalStorage = localStorage.getItem('paymentMethod') ?
+    JSON.parse(localStorage.getItem('paymentMethod')) : ''
+
 const initialState = {
     // Initializaion the redux store
     cart: {
         cartItems: cartItemsFromLocalStorage,
         shippingAddress: shippingAddressFromLocalStorage,
+        paymentMethod: paymentMethodFromLocalStorage,
     },
     userLogin: { userInfo: userInfoFromLocalStorage }
 }

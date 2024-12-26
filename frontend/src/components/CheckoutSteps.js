@@ -5,7 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 function CheckoutSteps({ step1, step2, step3, step4 }) {
     return (
         <div>
-            <Nav>
+            <Nav className='justify-content-center py-3 mb-3'>
                 <Nav.Item>
                     {step1 ? (
                         <LinkContainer to={{ pathname: '/login', search: '?redirect=/shipping' }}>

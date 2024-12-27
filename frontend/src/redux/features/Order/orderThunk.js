@@ -1,0 +1,17 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import OrderServices from '../../../services/orderServices'
+import { clearItems } from "../Cart/cartSlice";
+
+export const createOrder = createAsyncThunk(
+    'createOrder',
+    async (order, { dispatch, getState, rejectWithValue }) => {
+        try {
+            const { userLogin: { userInfo } } = getState()
+            const response = await OrderServices.addOrderItems(order, { userInfo, dispatch })
+            dispatch(clearItems())
+            return response
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)

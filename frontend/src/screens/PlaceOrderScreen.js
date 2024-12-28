@@ -19,6 +19,7 @@ function PlaceOrderScreen() {
         dispatch(createOrder({
             orderItems: cart.cartItems,
             shippingAddress: cart.shippingAddress,
+            paymentMethod: cart.paymentMethod,
             itemsPrice: itemsPrice,
             shippingPrice: shippingPrice,
             taxPrice: taxPrice,

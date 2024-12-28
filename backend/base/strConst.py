@@ -19,3 +19,27 @@ EMAIL_SUBJECT = '[ E-Shop Activation Email ]'
 
 def EMAIL_BODY(status: str, link: str, name: str) -> str:
     return f'Hi {name}, Welcome {"" if status is NEW_REGISTER else "back"} to E-Shop. Please click on below link to active your account in E-Shop.\n\n{link}'
+
+
+# addOrderItems
+QTY = 'qty'
+PRICE = 'price'
+PAYMENT_METHOD = 'paymentMethod'
+ORDER_ITEMS = 'orderItems'
+SHIPPING_ADDRESS = 'shippingAddress'
+ADDRESS = 'address'
+CITY = 'city'
+COUNTRY = 'country'
+POSTAL_CODE = 'postalCode'
+TOTAL_PRICE = 'totalPrice'
+TAX_PRICE = 'taxPrice'
+SHIPPING_PRICE = 'shippingPrice'
+PRODUCT = 'product'
+ERROR_ORDER_ITEMS = 'No order items provided!. Please add items to your order.'
+ERROR_PAYMENT_METHOD = 'Payment method is required.'
+ERROR_PRICES = 'Tax price, shipping price and total price are required.'
+REQUIRED_SHIPPING_FIELDS = [ADDRESS, CITY, COUNTRY, POSTAL_CODE]
+
+
+def ERROR_SHIPPING_ADDRESS_FIELD(field: str):
+    return f"Shipping address field '{field}' is required!"

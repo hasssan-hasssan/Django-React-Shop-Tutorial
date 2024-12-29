@@ -15,3 +15,16 @@ export const createOrder = createAsyncThunk(
         }
     }
 )
+
+
+export const getOrderDetails = createAsyncThunk(
+    'getOrderDetails',
+    async (orderId, { dispatch, getState, rejectWithValue }) => {
+        try {
+            const { userLogin: { userInfo } } = getState()
+            return await OrderServices.getOrderById(orderId, { userInfo, dispatch })
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)

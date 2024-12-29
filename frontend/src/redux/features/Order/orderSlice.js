@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { createOrder } from './orderThunk'
+import { createOrder, getOrderDetails } from './orderThunk'
 import { logout } from '../User/userThunk'
 
 
@@ -49,3 +49,37 @@ export const orderCreateSlice = createSlice({
 })
 
 export const { reset } = orderCreateSlice.actions
+
+
+export const orderDetailsSlice = createSlice({
+    name: 'orderDetails',
+    initialState: {
+        loading: false,
+        order: {},
+        error: ''
+    },
+    extraReducers: (builder) => {
+        builder.addCase(getOrderDetails.pending, (state) => {
+            state.loading = true
+            state.order = {}
+            state.error = ''
+        })
+        builder.addCase(getOrderDetails.fulfilled, (state, action) => {
+            state.loading = false
+            state.order = action.payload.data
+            state.error = ''
+        })
+        builder.addCase(getOrderDetails.rejected, (state, action) => {
+            state.loading = false
+            state.order = {}
+            state.error = action.payload.response && action.payload.response.data.detail
+                ? action.payload.response.data.detail : action.payload.message
+        })
+
+        builder.addCase(logout.fulfilled, (state) => {
+            state.loading = false
+            state.order = {}
+            state.error = ''
+        })
+    }
+})

@@ -97,7 +97,8 @@ def getOrderById(request, pk):
         return Response({DETAIL: ERROR_ORDER_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
     else:
         if user.is_staff or order.user == user:
-            serializer = OrderSerializer(order, many=False)
+            serializer = OrderSerializer(
+                order, many=False, context={'request': request})
             return Response(serializer.data)
         else:
             return Response({DETAIL: ERROR_NOT_AUTHORIZED}, status=status.HTTP_403_FORBIDDEN)

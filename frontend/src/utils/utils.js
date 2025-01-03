@@ -1,3 +1,6 @@
+import dayjs from "dayjs"
+
+
 export const calculatePrices = ({ cartItems }) => {
     const itemsPrice = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)
     const shippingPrice = (itemsPrice > 100 ? 0 : 10).toFixed(2)
@@ -9,4 +12,10 @@ export const calculatePrices = ({ cartItems }) => {
         taxPrice,
         totalPrice
     }
+}
+
+
+export const beautifulDate = (date) => {
+    const dateFormatted = dayjs(date).format('MMMM D, YYYY, h:mm A')
+    return dateFormatted
 }

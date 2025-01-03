@@ -72,9 +72,17 @@ class ShippingAddressSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = OrderItem
         fields = "__all__"
+
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(obj.image)
+        return obj.image
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -96,7 +104,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def get_orderItems(self, obj):
         items = obj.orderitem_set.all()
-        return OrderItemSerializer(items, many=True).data
+        return OrderItemSerializer(items, many=True, context=self.context).data
 
     def get_user(self, obj):
         return UserSerializer(obj.user, many=False).data

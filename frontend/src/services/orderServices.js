@@ -11,5 +11,12 @@ const getOrderById = (orderId, { userInfo, dispatch }) => {
     return authBackend.get(`/api/v1/orders/${orderId}/`)
 }
 
-const OrderServices = { addOrderItems, getOrderById }
+
+const getMyOrders = ({ userInfo, dispatch }) => {
+    const authBackend = authAxiosInstance(userInfo, dispatch)
+    return authBackend.get('/api/v1/orders/my/')
+}
+
+
+const OrderServices = { addOrderItems, getOrderById, getMyOrders }
 export default OrderServices

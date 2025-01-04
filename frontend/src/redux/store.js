@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { listProductSlice, productDetailsSlice } from './features/Product/productSlice'
 import { cartSlice } from './features/Cart/cartSlice'
 import { userLoginSlice, userRegisterSlice, userDetailsSlice, userUpdateProfileSlice } from './features/User/userSlice'
-import { orderCreateSlice, orderDetailsSlice } from './features/Order/orderSlice'
+import { orderCreateSlice, orderDetailsSlice, orderListMySlice } from './features/Order/orderSlice'
 
 // fetch user cart 
 const cartItemsFromLocalStorage = localStorage.getItem('cartItems') ?
@@ -39,6 +39,7 @@ const rootReducer = {
     userUpdateProfile: userUpdateProfileSlice.reducer,
     orderCreate: orderCreateSlice.reducer,
     orderDetails: orderDetailsSlice.reducer,
+    orderListMy: orderListMySlice.reducer,
 }
 
 const store = configureStore({

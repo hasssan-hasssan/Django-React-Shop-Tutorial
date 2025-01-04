@@ -47,3 +47,6 @@ def ERROR_SHIPPING_ADDRESS_FIELD(field: str):
 
 # getOrderById
 ERROR_ORDER_NOT_FOUND = 'Oops, Order not found!'
+
+# getMyOrders
+ERROR_ORDERS_NOT_FOUND = 'Oops, No orders found for you!'

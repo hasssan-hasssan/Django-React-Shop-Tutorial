@@ -15,7 +15,8 @@ from base.strConst import (
     ERROR_SHIPPING_ADDRESS_FIELD,
     ERROR_PRICES,
     ERROR_ORDER_NOT_FOUND,
-    ERROR_NOT_AUTHORIZED
+    ERROR_NOT_AUTHORIZED,
+    ERROR_ORDERS_NOT_FOUND
 )
 
 
@@ -102,3 +103,16 @@ def getOrderById(request, pk):
             return Response(serializer.data)
         else:
             return Response({DETAIL: ERROR_NOT_AUTHORIZED}, status=status.HTTP_403_FORBIDDEN)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getMyOrders(request):
+    user = request.user
+    # orders = user.order_set.all()
+    orders = Order.objects.filter(user=user)
+    if not orders:
+        return Response({DETAIL: ERROR_ORDERS_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
+    else:
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)

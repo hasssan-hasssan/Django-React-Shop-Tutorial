@@ -112,7 +112,7 @@ export const orderListMySlice = createSlice({
 
         builder.addCase(logout.fulfilled, (state) => {
             state.loading = false
-            state.orders = {}
+            state.orders = []
             state.error = ''
         })
     }

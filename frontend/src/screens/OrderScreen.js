@@ -1,6 +1,7 @@
 import React from 'react'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import OrderServices from '../services/orderServices'
 import { Row, Col, ListGroup, Button, Image, Card } from 'react-bootstrap'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -30,6 +31,31 @@ function OrderScreen() {
             dispatch(getOrderDetails(orderId))
         }
     }, [userInfo, dispatch, orderId])
+
+
+    const [payGateMsg, setPayGateMsg] = React.useState('')
+    const [isConnected, setIsConnected] = React.useState(false)
+
+    const resetStates = () => {
+        setPayGateMsg('')
+        setIsConnected(false)
+    }
+
+
+    const goPayGate = () => {
+        resetStates()
+        OrderServices.payOrder(order._id, { userInfo, dispatch })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                console.log(error)
+                setIsConnected(false)
+                error.response && error.response.data.detail
+                    ? setPayGateMsg(error.response.data.detail)
+                    : setPayGateMsg(error.message)
+            })
+    }
 
 
     return loading ? (
@@ -133,6 +159,34 @@ function OrderScreen() {
                                     <Col>${order.totalPrice}</Col>
                                 </Row>
                             </ListGroup.Item>
+
+                            {
+                                isConnected && (
+                                    <ListGroup.Item>
+                                        <Message variant='success' text='Redirecting to payment gateway ...' />
+                                    </ListGroup.Item>
+                                )
+                            }
+
+                            {
+                                !isConnected && payGateMsg && (
+                                    <ListGroup.Item>
+                                        <Message variant='danger' text={payGateMsg} />
+                                    </ListGroup.Item>
+                                )
+                            }
+
+                            {
+                                !order.isPaid && (
+                                    <ListGroup.Item>
+                                        <Button
+                                            type='button'
+                                            onClick={goPayGate}
+                                            className='w-100'
+                                        >Pay Order</Button>
+                                    </ListGroup.Item>
+                                )
+                            }
                         </ListGroup>
                     </Card>
                 </Col>

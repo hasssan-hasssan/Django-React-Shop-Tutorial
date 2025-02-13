@@ -18,5 +18,10 @@ const getMyOrders = ({ userInfo, dispatch }) => {
 }
 
 
-const OrderServices = { addOrderItems, getOrderById, getMyOrders }
+const payOrder = (orderId, { userInfo, dispatch }) => {
+    const authBackend = authAxiosInstance(userInfo, dispatch)
+    return authBackend.get(`/api/v1/orders/${orderId}/pay/`)
+}
+
+const OrderServices = { addOrderItems, getOrderById, getMyOrders, payOrder }
 export default OrderServices

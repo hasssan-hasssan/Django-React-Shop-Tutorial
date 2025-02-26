@@ -16,7 +16,8 @@ from base.strConst import (
     ERROR_PRICES,
     ERROR_ORDER_NOT_FOUND,
     ERROR_NOT_AUTHORIZED,
-    ERROR_ORDERS_NOT_FOUND
+    ERROR_ORDERS_NOT_FOUND,
+    ERROR_ORDER_PAID
 )
 
 
@@ -116,3 +117,20 @@ def getMyOrders(request):
     else:
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def payOrder(request, pk):
+    user = request.user
+
+    try:
+        order = Order.objects.get(_id=pk, user=user)
+    except Order.DoesNotExist:
+        return Response({DETAIL: ERROR_ORDER_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
+    else:
+        if not order.isPaid:
+            # TODO: Pay Order
+            pass
+        else:
+            return Response({DETAIL: ERROR_ORDER_PAID}, status=status.HTTP_400_BAD_REQUEST)

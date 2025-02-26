@@ -1,0 +1,2 @@
+class ZibalServerAPIs:
+    pass

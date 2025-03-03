@@ -1,7 +1,9 @@
+from requests import RequestException
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from base.zibal import zibal_apis
 from base.models import Product, Order, OrderItem, ShippingAddress
 from base.serializers import OrderSerializer
 from base.strConst import (
@@ -10,6 +12,7 @@ from base.strConst import (
     POSTAL_CODE, TOTAL_PRICE, TAX_PRICE,
     SHIPPING_PRICE,
     REQUIRED_SHIPPING_FIELDS,
+    RESULT, TRACK_ID, LINK, MAKE_PAYMENT_LINK,
     ERROR_ORDER_ITEMS,
     ERROR_PAYMENT_METHOD,
     ERROR_SHIPPING_ADDRESS_FIELD,
@@ -17,7 +20,9 @@ from base.strConst import (
     ERROR_ORDER_NOT_FOUND,
     ERROR_NOT_AUTHORIZED,
     ERROR_ORDERS_NOT_FOUND,
-    ERROR_ORDER_PAID
+    ERROR_ORDER_PAID,
+    ERROR_TRANSACTION_CREATE_DB,
+    ERROR_ZIBAL_SERVER_CONNECTION,
 )
 
 
@@ -130,7 +135,20 @@ def payOrder(request, pk):
         return Response({DETAIL: ERROR_ORDER_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
     else:
         if not order.isPaid:
-            # TODO: Pay Order
-            pass
+            try:
+                res: dict = zibal_apis.server_apis.request(order)
+            except RequestException:
+                return Response({DETAIL: ERROR_ZIBAL_SERVER_CONNECTION}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                result: int = res.get(RESULT)
+                if result == 100:
+                    if zibal_apis.database_apis.create(order, user, res):
+                        trackId: str = str(res.get(TRACK_ID))
+                        return Response({LINK: MAKE_PAYMENT_LINK(trackId)}, status=status.HTTP_200_OK)
+                    else:
+                        return Response({DETAIL: ERROR_TRANSACTION_CREATE_DB}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    MSG = zibal_apis.server_apis.result_code_translator(result)
+                    return Response({DETAIL: MSG}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({DETAIL: ERROR_ORDER_PAID}, status=status.HTTP_400_BAD_REQUEST)

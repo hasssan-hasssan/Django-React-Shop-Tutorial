@@ -47,6 +47,10 @@ function OrderScreen() {
         OrderServices.payOrder(order._id, { userInfo, dispatch })
             .then((response) => {
                 console.log(response)
+                setIsConnected(true)
+                setTimeout(() => {
+                    window.location.assign(response.data.paymentLink)
+                }, 2000)
             })
             .catch((error) => {
                 console.log(error)

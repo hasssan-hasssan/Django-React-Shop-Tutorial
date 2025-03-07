@@ -1,4 +1,5 @@
 import requests
+from django.urls import reverse
 from django.conf import settings
 from base.models import Order
 from base.strConst import (
@@ -16,7 +17,7 @@ class ZibalServerAPIs:
         data[MERCHANT] = self.merchant
         data[AMOUNT] = int(order.totalPrice * 10)
         data[ORDER_ID] = str(order._id)
-        data[CALLBACK_URL] = 'http://localhost:8000/callbackUrl'
+        data[CALLBACK_URL] = settings.BACKEND_DOMAIN + reverse('zibalCallback')
         return self.postTo(REQUEST_PATH, data)
 
     def result_code_translator(self, result: int) -> str:

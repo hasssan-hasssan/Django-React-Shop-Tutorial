@@ -1,5 +1,7 @@
-from django.db import models
+from secrets import token_urlsafe
+from django.db import models, IntegrityError
 from django.contrib.auth.models import User
+from base.strConst import ERROR_UNABLE_GENERATE_PAYMENT_TOKEN
 
 
 class Product(models.Model):
@@ -111,3 +113,32 @@ class Zibal(models.Model):
 
     def __str__(self):
         return str(self.trackId)
+
+
+class PaymentToken(models.Model):
+    class Meta:
+        verbose_name_plural = 'Zibal Payments Token'
+
+    _id = models.AutoField(primary_key=True, editable=False)
+    token = models.CharField(max_length=40, unique=True)
+    trackId = models.CharField(max_length=255)
+    orderId = models.CharField(max_length=255)
+    createdAt = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.token
+
+    def save(self, *args, **kwargs):
+        max_attempts = 5
+        attempt = 0
+
+        while attempt < max_attempts:
+            try:
+                token = token_urlsafe(30)
+                self.token = token
+                super().save(*args, **kwargs)
+                return None
+            except IntegrityError:
+                attempt += 1
+                if attempt == max_attempts:
+                    raise ValueError(ERROR_UNABLE_GENERATE_PAYMENT_TOKEN)

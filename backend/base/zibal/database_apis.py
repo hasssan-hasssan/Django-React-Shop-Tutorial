@@ -2,7 +2,8 @@ import logging
 from django.contrib.auth.models import User
 from base.models import Order, Zibal, PaymentToken
 from base.strConst import (
-    TRACK_ID, ERROR_TRANSACTION_CREATE_DB, MORE_DETAILS
+    TRACK_ID, ERROR_TRANSACTION_CREATE_DB, MORE_DETAILS,
+    ERROR_UPDATE_TRANSACTION
 )
 
 
@@ -21,6 +22,15 @@ class ZibalDatabaseAPIs:
         except Exception as e:
             logging.error(ERROR_TRANSACTION_CREATE_DB +
                           MORE_DETAILS % {'e': e})
+            return False
+
+    def update(self, transaction: Zibal, lastStatus: int) -> bool:
+        try:
+            transaction.lastStatus = lastStatus
+            transaction.save()
+            return True
+        except Exception as e:
+            logging.error(ERROR_UPDATE_TRANSACTION + MORE_DETAILS % {'e': e})
             return False
 
     def generate_payment_token(self, orderId: str, trackId: str) -> str:

@@ -3,7 +3,9 @@ from django.urls import reverse
 from django.conf import settings
 from base.models import Order
 from base.strConst import (
-    UNKNOWN_ERROR, MERCHANT, AMOUNT, ORDER_ID, CALLBACK_URL, ZIBAL_DOMAIN_IPG, REQUEST_PATH
+    UNKNOWN_ERROR, MERCHANT, AMOUNT, ORDER_ID, 
+    CALLBACK_URL, ZIBAL_DOMAIN_IPG, REQUEST_PATH,
+    TRACK_ID, VERIFY_PATH
 )
 
 
@@ -19,6 +21,12 @@ class ZibalServerAPIs:
         data[ORDER_ID] = str(order._id)
         data[CALLBACK_URL] = settings.BACKEND_DOMAIN + reverse('zibalCallback')
         return self.postTo(REQUEST_PATH, data)
+
+    def verify(self, trackId: int) -> dict:
+        data = {}
+        data[MERCHANT] = self.merchant
+        data[TRACK_ID] = trackId
+        return self.postTo(VERIFY_PATH, data)
 
     def result_code_translator(self, result: int) -> str:
         code_translator = {

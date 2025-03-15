@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from base.zibal import zibal_apis
-from base.models import Product, Order, OrderItem, ShippingAddress
+from base.models import Product, Order, OrderItem, ShippingAddress, PaymentToken, Zibal
 from base.serializers import OrderSerializer
 from base.strConst import (
     DETAIL, ORDER_ITEMS, PAYMENT_METHOD, QTY, PRICE,
@@ -23,6 +23,7 @@ from base.strConst import (
     ERROR_ORDER_PAID,
     ERROR_TRANSACTION_CREATE_DB,
     ERROR_ZIBAL_SERVER_CONNECTION,
+    ERROR_TRANSACTION_DETAILS_NOT_FOUND
 )
 
 
@@ -152,3 +153,23 @@ def payOrder(request, pk):
                     return Response({DETAIL: MSG}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({DETAIL: ERROR_ORDER_PAID}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def inquiryPay(request, token):
+    user = request.user
+    
+    try:
+        payment_token = PaymentToken.objects.get(token=token)
+        order = Order.objects.get(_id=payment_token.orderId, user=user)
+        transaction = Zibal.objects.get(trackId=int(payment_token.trackId), order=order, user=user)
+    except (PaymentToken.DoesNotExist , Order.DoesNotExist, Zibal.DoesNotExist):
+        return Response({DETAIL: ERROR_TRANSACTION_DETAILS_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
+    else:
+        if transaction.lastStatus != 0 and transaction.refNumber:
+            response: dict = zibal_apis.server_apis.generate_inquiry_pay_response(transaction)
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            # TODO : Send inquiry pay request
+            pass

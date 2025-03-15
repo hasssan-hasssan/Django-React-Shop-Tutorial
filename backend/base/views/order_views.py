@@ -23,7 +23,8 @@ from base.strConst import (
     ERROR_ORDER_PAID,
     ERROR_TRANSACTION_CREATE_DB,
     ERROR_ZIBAL_SERVER_CONNECTION,
-    ERROR_TRANSACTION_DETAILS_NOT_FOUND
+    ERROR_TRANSACTION_DETAILS_NOT_FOUND, 
+    ERROR_REGISTRATION_PAYMENT_CONFIRMED
 )
 
 
@@ -171,5 +172,18 @@ def inquiryPay(request, token):
             response: dict = zibal_apis.server_apis.generate_inquiry_pay_response(transaction)
             return Response(response, status=status.HTTP_200_OK)
         else:
-            # TODO : Send inquiry pay request
-            pass
+            try:
+                res: dict = zibal_apis.server_apis.inquiry(transaction.trackId)
+            except RequestException:
+                return Response({DETAIL: ERROR_ZIBAL_SERVER_CONNECTION}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                result: int = res.get(RESULT)
+                if result == 100:
+                    if zibal_apis.database_apis.complete(transaction, res):
+                        response: dict = zibal_apis.server_apis.generate_inquiry_pay_response(transaction)
+                        return Response(response, status=status.HTTP_200_OK)
+                    else:
+                        return Response({DETAIL: ERROR_REGISTRATION_PAYMENT_CONFIRMED})
+                else:
+                    MSG = zibal_apis.server_apis.result_code_translator(result)
+                    return Response({DETAIL: MSG}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -12,6 +12,8 @@ import ShippingScreen from './screens/ShippingScreen'
 import PaymentScreen from './screens/PaymentScreen'
 import PlaceOrderScreen from './screens/PlaceOrderScreen'
 import OrderScreen from './screens/OrderScreen'
+import PayResultScreen from './screens/PayResultScreen'
+import PrivateComponent from './components/PrivateComponent'
 
 function App() {
   return (
@@ -30,6 +32,9 @@ function App() {
             <Route path='/payment' element={<PaymentScreen />} />
             <Route path='/placeorder' element={<PlaceOrderScreen />} />
             <Route path='/order/:orderId' element={<OrderScreen />} />
+            <Route path='/pay-result/:token' element={
+              <PrivateComponent component={PayResultScreen} />
+            } />
           </Routes>
         </Container>
       </main>

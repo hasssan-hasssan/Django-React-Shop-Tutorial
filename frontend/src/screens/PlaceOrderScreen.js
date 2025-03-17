@@ -27,16 +27,12 @@ function PlaceOrderScreen() {
         }))
     }
     const { loading, error, success, order } = useSelector(state => state.orderCreate)
-    const { userInfo } = useSelector(state => state.userLogin)
     React.useEffect(() => {
-        if (!userInfo.access) {
-            navigate('/login?redirect=/placeorder')
-        }
         if (success) {
             navigate(`/order/${order._id}`)
             dispatch(reset())
         }
-    }, [success, navigate, userInfo])
+    }, [success, navigate])
 
     return (
         <div>

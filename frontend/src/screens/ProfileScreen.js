@@ -22,7 +22,6 @@ function ProfileScreen() {
     const [successUpdate, setSuccessUpdate] = React.useState('')
 
 
-    const { userInfo } = useSelector(state => state.userLogin)
     const {
         user,
         success: successUserDetails,
@@ -42,21 +41,18 @@ function ProfileScreen() {
     } = useSelector(state => state.orderListMy)
 
     React.useEffect(() => {
-        if (!userInfo.email) {
-            navigate('/login?redirect=/profile')
+
+        if ((!successUserDetails && !user.email) || successUserUpdateProfile) {
+            dispatch(reset()) // reset userUpdateProfileSlice
+            dispatch(getUserDetails('profile'))
+            setTimeout(() => {
+                dispatch(getMyOrderList())
+            }, 2000)
         } else {
-            if ((!successUserDetails && !user.email) || successUserUpdateProfile) {
-                dispatch(reset()) // reset userUpdateProfileSlice
-                dispatch(getUserDetails('profile'))
-                setTimeout(() => {
-                    dispatch(getMyOrderList())
-                }, 2000)
-            } else {
-                setEmail(user.email)
-                setName(user.name)
-            }
+            setEmail(user.email)
+            setName(user.name)
         }
-    }, [userInfo, navigate, dispatch, successUserDetails, successUserUpdateProfile])
+    }, [navigate, dispatch, successUserDetails, successUserUpdateProfile])
 
     const resetStates = () => {
         setPassword('')

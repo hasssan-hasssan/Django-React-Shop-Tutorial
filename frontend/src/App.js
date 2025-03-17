@@ -24,17 +24,37 @@ function App() {
           <Routes>
             <Route path='/' element={<HomeScreen />} />
             <Route path='/product/:id' element={<ProductScreen />} />
+
             <Route path='/cart' element={<CartScreen />} />
+
             <Route path='/login' element={<LoginScreen />} />
             <Route path='/register' element={<RegisterScreen />} />
-            <Route path='/profile' element={<ProfileScreen />} />
-            <Route path='/shipping' element={<ShippingScreen />} />
-            <Route path='/payment' element={<PaymentScreen />} />
-            <Route path='/placeorder' element={<PlaceOrderScreen />} />
-            <Route path='/order/:orderId' element={<OrderScreen />} />
+
+
+            <Route path='/profile' element={
+              <PrivateComponent component={ProfileScreen} />
+            } />
+
+            <Route path='/shipping' element={
+              <PrivateComponent component={ShippingScreen} />
+            } />
+
+            <Route path='/payment' element={
+              <PrivateComponent component={PaymentScreen} />
+            } />
+
+            <Route path='/placeorder' element={
+              <PrivateComponent component={PlaceOrderScreen} />
+            } />
+
+            <Route path='/order/:orderId' element={
+              <PrivateComponent component={OrderScreen} />
+            } />
+
             <Route path='/pay-result/:token' element={
               <PrivateComponent component={PayResultScreen} />
             } />
+
           </Routes>
         </Container>
       </main>

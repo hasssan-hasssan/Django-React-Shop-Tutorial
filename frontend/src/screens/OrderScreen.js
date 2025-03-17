@@ -24,13 +24,11 @@ function OrderScreen() {
 
     React.useEffect(() => {
 
-        if (!userInfo.access) {
-            navigate(`/login?redirect=/order/${orderId}`)
-        } else if (!order._id || (order._id !== orderId)) {
+        if (!order._id || (order._id !== orderId)) {
 
             dispatch(getOrderDetails(orderId))
         }
-    }, [userInfo, dispatch, orderId])
+    }, [dispatch, orderId])
 
 
     const [payGateMsg, setPayGateMsg] = React.useState('')

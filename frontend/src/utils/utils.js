@@ -34,8 +34,7 @@ export const beautifulDate = (date) => {
 // Function to get and encode the 'redirect' query parameter from URLSearchParams
 export const getRedirectParam = (urlParams, defaultRedirect = '/') => {
     // Retrieve the 'redirect' parameter or fallback to the defaultRedirect ('/')
-    // Encodes the URL parameter to ensure it is safe for use in navigation
-    return encodeURIComponent(urlParams?.get('redirect') ?? defaultRedirect);
+    return urlParams?.get('redirect') ?? defaultRedirect
 }
 
 

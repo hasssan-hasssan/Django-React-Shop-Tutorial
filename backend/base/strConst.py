@@ -19,6 +19,9 @@ EMAIL_SUBJECT = 'E-SHOP | VERIFICATION EMAIL'
 
 
 def HTML_TEMPLATE_VERIFICATION_EMAIL(status: str, link: str) -> str:
+    """
+        Generate HTML template for a verification email based on the given status and link.
+    """
     html_content = """
         <!DOCTYPE html>
             <html lang="en">
@@ -77,11 +80,6 @@ def HTML_TEMPLATE_VERIFICATION_EMAIL(status: str, link: str) -> str:
 
     """
     return html_content
-
-
-
-
-
 
 
 # addOrderItems
@@ -177,6 +175,9 @@ def PAY_RESULT_REDIRECT(token: str, db_status: bool | None = None) -> str:
 
 # Signal Constants
 def HTML_TEMPLATE_NEW_USER_ALERT(user) -> str:
+    """
+        Generates an HTML template for alerting about a new user with their details.
+    """
     html_content = """
     <html>
         <style>
@@ -224,6 +225,10 @@ def HTML_TEMPLATE_NEW_USER_ALERT(user) -> str:
 
 
 def HTML_TEMPLATE_NEW_ORDER_ALERT(user, order, orderItems, itemsPrice) -> str:
+    """
+        Generates an HTML template for alerting about a new order with order and user details.
+    """
+    
     html_content = f"""\
     <html>
     <body style="background-color: #152238; color: #E0E0E0; font-family: 'Consolas'; padding: 20px;">

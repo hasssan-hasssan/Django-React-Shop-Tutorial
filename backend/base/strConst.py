@@ -111,3 +111,6 @@ def PAY_RESULT_REDIRECT(token: str, db_status: bool | None = None) -> str:
     else:
         url += f'?db={db_status}'
     return url
+
+
+UNEXPECTED_ERROR = 'Unexpected error occurred!'

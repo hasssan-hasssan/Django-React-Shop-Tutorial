@@ -1,7 +1,9 @@
+import logging
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
+from django.db import IntegrityError
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
@@ -13,7 +15,8 @@ from base.strConst import (
     SUCCESS_NEW_REGISTER,
     ERROR_ON_SENDING_EMAIL,
     ERROR_USER_EXISTS_IS_NOT_ACTIVE,
-    ERROR_USER_EXISTS_IS_ACTIVE_TOO
+    ERROR_USER_EXISTS_IS_ACTIVE_TOO,
+    UNEXPECTED_ERROR, MORE_DETAILS
 )
 from base import utils
 import jwt
@@ -58,31 +61,36 @@ def registerUser(request):
         )
 
         # Send an activation email
-        activationLink: str = utils.createActivationLink(
-            user)  # Generate the activation link
-        email: dict = utils.createEmail(
-            NEW_REGISTER, activationLink, user)  # Create the email content
+        activationLink: str = utils.createActivationLink(user)  # Generate the activation link
+        email: dict = utils.createEmail(NEW_REGISTER, activationLink, user)  # Create the email content
         if utils.sendEmail(email):  # Send the activation email
             return Response({DETAIL: SUCCESS_NEW_REGISTER}, status=status.HTTP_201_CREATED)
         else:
             return Response({DETAIL: ERROR_ON_SENDING_EMAIL}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    except Exception as e:
+        
+    except IntegrityError:
         # Handle cases where the user already exists but is not active
         user = User.objects.get(username=username)
         if user and not user.is_active:
-            # Update the user's password and resend the activation email
+            # Update the user's password 
             user.password = make_password(password)
             user.save()
-            activationLink: str = utils.createActivationLink(user)
-            email: dict = utils.createEmail(
-                IS_NOT_ACTIVE, activationLink, user)
-            if utils.sendEmail(email):
-                return Response({DETAIL: ERROR_USER_EXISTS_IS_NOT_ACTIVE}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Resend the activation email
+            activationLink: str = utils.createActivationLink(user) # Generate the activation link
+            email: dict = utils.createEmail( IS_NOT_ACTIVE, activationLink, user) # Create the email content
+            if utils.sendEmail(email): # Send the activation email
+                return Response({DETAIL: ERROR_USER_EXISTS_IS_NOT_ACTIVE}, status=status.HTTP_200_OK)
             else:
                 return Response({DETAIL: ERROR_ON_SENDING_EMAIL}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         elif user and user.is_active:
             # Handle cases where the user is already active
-            return Response({DETAIL: ERROR_USER_EXISTS_IS_ACTIVE_TOO}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({DETAIL: ERROR_USER_EXISTS_IS_ACTIVE_TOO}, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        # Report unexpected error occurred.
+        logging.error(UNEXPECTED_ERROR + MORE_DETAILS % {'e': e})
+        return Response({DETAIL: UNEXPECTED_ERROR}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # Define an API endpoint to update the profile of the authenticated user
@@ -116,7 +124,7 @@ def verifyEmail(request, token):
             key=settings.SECRET_KEY,
             algorithms=[settings.SIMPLE_JWT['ALGORITHM']]
         )
-    except Exception as e:
+    except jwt.PyJWTError:
         # Redirect to the frontend login page with an invalid token message if decoding fails
         return HttpResponseRedirect(f'{settings.FRONTEND_DOMAIN}/login?token=invalid')
     else:

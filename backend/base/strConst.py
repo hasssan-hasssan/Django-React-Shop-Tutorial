@@ -15,11 +15,73 @@ ERROR_PRODUCTS_NOT_REGISTERED = 'Oops, No product registered yet!'
 NEW_REGISTER = 'new_register'
 IS_NOT_ACTIVE = 'is_not_active'
 ERROR_ON_SENDING_EMAIL = 'Oops, there is a problem on sending email!'
-EMAIL_SUBJECT = '[ E-Shop Activation Email ]'
+EMAIL_SUBJECT = 'E-SHOP | VERIFICATION EMAIL'
 
 
-def EMAIL_BODY(status: str, link: str, name: str) -> str:
-    return f'Hi {name}, Welcome {"" if status is NEW_REGISTER else "back"} to E-Shop. Please click on below link to active your account in E-Shop.\n\n{link}'
+def HTML_TEMPLATE_VERIFICATION_EMAIL(status: str, link: str) -> str:
+    html_content = """
+        <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Verify Your Email</title>
+                <style>
+                    body {
+                        background-color: #03002e; /* Dark blue background */
+                        color: #E0E0E0; /* Light text for readability */
+                        font-family: Consolas;
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    .container {
+                        text-align: center;
+                        padding: 50px;
+                    }
+
+                    h1 {
+                        color: #090088; /* Bright blue for the title */
+                        font-size: 2rem;
+                    }
+
+                    .button {
+                        display: inline-block;
+                        margin-top: 20px;
+                        padding: 15px 30px;
+                        font-size: 1rem;
+                        font-weight: bold;
+                        background-color: #02006c; /* Button background */
+                        color: #E0E0E0; /* Button text */
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        text-decoration: none;
+                    }
+
+                    .button:hover {
+                        background-color: #010057; /* Darker blue for hover effect */
+                    }
+                </style>
+            </head>
+    """
+    html_content += f"""
+            <body>
+                <div class="container">
+                    <h1>Welcome {"" if status is NEW_REGISTER else "back"} to E-Shop!</h1>
+                    <p>You have to verify your email to complete your registration.</p>
+                    <a href="{link}" class="button">Verify Email</a>
+                </div>
+            </body>
+            </html>
+
+    """
+    return html_content
+
+
+
+
+
 
 
 # addOrderItems

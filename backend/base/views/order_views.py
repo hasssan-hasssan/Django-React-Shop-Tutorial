@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from base.signals import order_created
 from base.zibal import zibal_apis
 from base.models import Product, Order, OrderItem, ShippingAddress, PaymentToken, Zibal
 from base.serializers import OrderSerializer
@@ -99,6 +100,9 @@ def addOrderItems(request):
         # Decrease the product's stock by the ordered quantity
         product.countInStock -= orderItem.qty
         product.save()  # Save the updated product object
+
+    # Notify admin new order on e-shop
+    order_created.send(sender=Order, order=order, user=user)
 
     # Serialize the order object to a JSON-compatible format
     serializer = OrderSerializer(order, many=False)

@@ -113,4 +113,100 @@ def PAY_RESULT_REDIRECT(token: str, db_status: bool | None = None) -> str:
     return url
 
 
+# Signal Constants
+def HTML_TEMPLATE_NEW_USER_ALERT(user) -> str:
+    html_content = """
+    <html>
+        <style>
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            td {
+                    
+                font-size: 1.1rem;
+            }
+        </style>
+    """
+    html_content += f"""
+        <body style="background-color: #152238; color: #E0E0E0; font-family: 'Consolas'; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background-color: #192841; border-radius: 8px; padding:10px 30px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);">
+                    <h2 style="
+                        padding-bottom:30px;
+                        color: #E0E0E0;
+                        text-align: center;
+                        border-bottom: 2px solid #1c2e4a;">
+                        User Details
+                    </h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px; color: #B0BEC5; border-bottom: 1px solid #1c2e4a;">Email</td>
+                            <td style="padding: 12px; color: #E3F2FD; border-bottom: 1px solid #1c2e4a;">{user.email}</td>
+                        </tr>
+                        <tr style="background-color: #203354;">
+                            <td style="padding: 12px; color: #B0BEC5; border-bottom: 1px solid #1c2e4a;">Name</td>
+                            <td style="padding: 12px; color: #E3F2FD; border-bottom: 1px solid #1c2e4a;">{user.first_name}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; color: #B0BEC5;">Date Joined</td>
+                            <td style="padding: 12px; color: #E3F2FD;">{user.date_joined.strftime('%d-%m-%Y %H:%M:%S')}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </body>
+    </html>\
+    """
+    return html_content
+
+
+def HTML_TEMPLATE_NEW_ORDER_ALERT(user, order, orderItems, itemsPrice) -> str:
+    html_content = f"""\
+    <html>
+    <body style="background-color: #152238; color: #E0E0E0; font-family: 'Consolas'; padding: 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #192841; border-radius: 8px; padding:10px 30px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);">
+            <h2 style="
+                padding-bottom:30px;
+                color: #E0E0E0;
+                text-align: center;
+                border-bottom: 2px solid #1c2e4a;">
+                Order Details
+            </h2>
+                <p style="color: #E3F2FD;">User: {user.username}</p>
+                <p style="color: #E3F2FD;">Order ID: #{order._id}</p>
+                <hr style="border: 1px solid #1c2e4a; margin: 10px 0;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #23395d;">
+                            <th style="padding: 12px; text-align: left; color: #FFFFFF; border-bottom: 2px solid #1c2e4a;">Item Name</th>
+                            <th style="padding: 12px; text-align: left; color: #FFFFFF; border-bottom: 2px solid #1c2e4a; text-align:center">Quantity</th>
+                            <th style="padding: 12px; text-align: left; color: #FFFFFF; border-bottom: 2px solid #1c2e4a; text-align:center">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    """
+
+    for item in orderItems:
+        html_content += f"""\
+                        <tr style="background-color: #203354;">
+                            <td style="padding: 12px; color: #B0BEC5; border-bottom: 1px solid #1c2e4a; vertical-align: middle;">{item.name}</td>
+                            <td style="padding: 12px; color: #E3F2FD; border-bottom: 1px solid #1c2e4a; text-align: center; vertical-align: middle;">{item.qty}</td>
+                            <td style="padding: 12px; color: #E3F2FD; border-bottom: 1px solid #1c2e4a; text-align: center; vertical-align: middle;">{item.price}</td>
+                        </tr>
+        """
+    html_content += f"""\
+                    </tbody>
+                </table>
+                <hr style="border: 1px solid #1c2e4a; margin: 10px 0;">
+                <p style="color: #E3F2FD;">Total Price of Items: {itemsPrice}</p>
+            </div>
+        </body>
+    </html>\
+    """
+    return html_content
+
+
+
+
 UNEXPECTED_ERROR = 'Unexpected error occurred!'

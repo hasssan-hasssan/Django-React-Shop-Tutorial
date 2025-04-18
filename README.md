@@ -13,3 +13,5 @@
 ### [Chapter 6: Authentication system => frontend]()
 
 ### [Chapter 7: Order registration system]()
+
+### [Chapter 8: Implement Zibal IPG]()

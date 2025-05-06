@@ -16,6 +16,6 @@
 
 ### [Chapter 8 : Implement Zibal IPG](https://hamruyesh.com/product/build-full-stack-store-with-django-and-react-tutorial-payment-gateway-part8-hamruyesh-com/)
 
-### [Chapter 9 : Deploy e-commerce](https://hamruyesh.com/product/build-full-stack-store-with-django-and-react-tutorial-payment-gateway-part9/)
+### [Chapter 9 : Deploy project](https://hamruyesh.com/product/build-full-stack-store-with-django-and-react-tutorial-payment-gateway-part9/)
 
 ### [Comprehensive package](https://hamruyesh.com/product/django-react-eshop-full-course/)
